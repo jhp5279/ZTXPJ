@@ -1,0 +1,105 @@
+프로젝트 : school
+
+1. 성적입력 
+2. 학생관리
+3. 커뮤니티 (공지사항, 게시판, 자료실) => 하나의 모듈
+4. 선생님관리
+5. 메모주고받기
+
+구성
+기본패키지.controller => 컨트롤러
+MainController  , CommController , TeacherController , MemoController
+
+기본패키지.service     => 서비스클래스
+MainService     , CommService  , TeacherService , MemoService
+
+기본패키지.mapper   => interface
+MainMapper   , CommMapper , TeacherMapper , MemoMapper
+
+기본패키지.dto           =>  dto
+TeacherDto    ,  CommDto  ,  MemoDto
+
+mapper                     => xml
+MainMapper  ,  CommMapper  , TeacherMapper , MemoMapper
+
+폴더 구조 (templates)
+main : 메인, 로그인
+comm : 커뮤니티
+teacher : 교직원관리
+  - tlist.html  , twritehtml  
+memo : 메모관리
+
+
+teacher테이블
+ create table teacher(
+    -> id int auto_increment unique,
+    -> level int,
+    -> ban int,
+    -> userid char(10),
+    -> pwd char(10),
+    -> name char(20),
+    -> email varchar(100),
+    -> phone char(20),
+    -> writeday date,
+    -> primary key(userid) );
+
+
+커뮤니티 : community => 공지사항 , 게시판 , 자료실을 하나로 이용
+create table community(
+id int auto_increment primary key,
+userid char(10),
+title varchar(100),
+content text,
+writeday date,
+cla int,
+readnum int default 0,
+ofname varchar(100),
+sfname varchar(100) );
+
+추가로 userid를 외래키로 지정
+ alter table community add foreign key(userid) references teacher(userid) on delete cascade on update cascade;
+
+테이블구조
+show create table community;
+
+글쓰기 링크
+공지사항 : level 80이상만 
+게시판  
+자료실 
+
+
+메모관리 : 메모를 주고 받기
+테이블 : memo
+create table memo(
+     id int auto_increment primary key,
+     title varchar(100),
+     content text,
+     ofname varchar(100),
+    sfname varchar(100),
+     writeday datetime,
+     seUserid char(10),
+     reUserid char(10),
+     state int default 0);
+
+alter table memo add foreign key(seUserid) references teacher(userid) on delete cascade on update cascade;
+
+ alter table memo add foreign key(reUserid) references teacher(userid) on delete cascade on update cascade;
+ 
+
+send.html에서  메모쓰기를 클릭하면 레이어를 보이게하기
+레이어 : 제목, 내용, 파일,받는사람아이디
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
